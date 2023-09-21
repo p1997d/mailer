@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset = utf-8" />
+		<meta name="description" content="mailer">
+		<title>mailer</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="login">
+			<p>Войти с помощью</p>
+			<button onclick="myFunction()" class="btn btn-outline-dark btn-circle"><img src="https://yastatic.net/doccenter/images/tech2.yandex.ru/ru/passport/doc/dg/freeze/6rDvXXB38VOBgtxkOExfxnZPUWs.png" /></button>
+		</div>		
+	</body>
+	
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		function myFunction() {
+		  location.replace( 'https://oauth.yandex.ru/authorize?response_type=token&client_id=5c5165532f344a4097acbc321143d4fa&redirect_uri=https://mailer-20210923.herokuapp.com&force_confirm=yes&display=popup' )
+		}
+		var socket = io();
+		if ( document.location.hash != '' ){
+			var token = /access_token=([^&]+)/.exec( document.location.hash )[1];
+			socket.emit( 'login', { token: token } );
+			socket.on( 'login', function() {
+				location.replace( '/' );
+			})		
+		}
+	</script>
+	<style>
+	body {
+		background: #f8f9fa;
+	}
+	.login {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		background: #fff;
+		padding: 30px;
+		border-radius: 15px;
+		text-align: center;
+	}
+	.btn-circle {
+		width: 55px;
+		height: 55px;
+		border-radius: 40px;
+		text-align: center;
+		padding-left: 0;
+		padding-right: 0;
+		font-size: 16px;
+	}
+	</style>
+</html>
